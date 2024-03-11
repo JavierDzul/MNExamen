@@ -1,8 +1,8 @@
-import mathApp from "../../helpers/math"
+
 
 export const StartForm = ({children}) => {
   return (
-    <div className="">
+    <div className=" justify-content-center ">
         <div className="card">
           <div className=" card-body ">
             <div className=" row">
@@ -14,23 +14,9 @@ export const StartForm = ({children}) => {
               
               <div className="col">
                 <div className="card p-4 ">
-                  <div className="card-body  p-2  m-4">
+                  <div className="card-body justify-content-center  p-2  m-4">
                   {children}
-                  <h3>Métodos</h3>
-                  <div className="row row-cols-4 ">
-                    <div className="col">
-                        <button className=" btn-outline-primary ">Bisección</button>
-                    </div>
-                    <div className="col">
-                      <button className=" btn-outline-primary ">Regla Falsa</button>
-                    </div>
-                    <div className="col">
-                    <button className=" btn-outline-primary ">Newton Graphson</button>
-                    </div>
-                    <div className="col">
-
-                    </div>
-                  </div>
+                  
                   </div>
                 </div>
               </div>

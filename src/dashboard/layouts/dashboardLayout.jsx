@@ -2,7 +2,7 @@
 export const DashboardLayout = ({children}) => {
   return (
 
-    <div className=" container-fluid h-auto  w-auto  bg-primary ">
+    <div className="  flex-wrap  container h-auto  w-auto  bg-primary  ">
         <div>
 
 
