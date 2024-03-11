@@ -1,12 +1,21 @@
 
-export const dashboardLayout = ({children}) => {
+export const DashboardLayout = ({children}) => {
   return (
 
-    <div className=" container mt-1 ms-3 p-2">
-      <h1>sadadasdasdas</h1>
-      </div>
+    <div className=" container-fluid h-auto  w-auto  bg-primary ">
+        <div>
+
+
+                <div className="container-fluid">
+                    { children }
+                </div>
+            
+
+        </div>
+
+    </div>
   )
 }
 
 
-export default dashboardLayout
+export default DashboardLayout

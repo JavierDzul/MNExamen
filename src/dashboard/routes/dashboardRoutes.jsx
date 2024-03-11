@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { dashboardLayout } from "../layouts/dashboardLayout"
+import { DashboardLayout } from "../layouts/dashboardLayout"
 import { HomePage } from "../pages/home"
 
 export const DashboardRoutes = () => {
 
 
   return (
-    <dashboardLayout>
+    
       <Routes>
           <Route path="home" element={ <HomePage /> }/>
         
@@ -15,6 +15,6 @@ export const DashboardRoutes = () => {
           <Route path="/*" element={ <Navigate to="/home" /> }/>
 
       </Routes>
-    </dashboardLayout>
+    
   )
 }
