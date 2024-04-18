@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Graficador from './graficador'
+import Graficador from './Graph'
 
 export default function Metodo({ method, func, params, setParams }) {
   const [handleParams, setHandleParams] = useState(params)

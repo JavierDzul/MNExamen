@@ -2,11 +2,12 @@
 import { useState, useEffect } from 'react'
 
 
-import Metodo from '../components/metodo'
+import Metodo from '../components/Method.jsx'
 import InputForm from "../components/inputForm"
 import { StartForm } from "../components/startForm"
 import DashboardLayout from "../layouts/dashboardLayout"
 import { metodos } from '../../helpers/math.js'
+import SystemMethod from '../components/SystemMethod.jsx'
 
 export const HomePage = () => {
 
@@ -19,25 +20,26 @@ export const HomePage = () => {
   }, [func])
   
     return (
+      <>
       
-      <DashboardLayout>
-        <StartForm>
-
-            <InputForm setFunc={setFunc} />
+        <StartForm/>
+            {
+              /*
+              <InputForm setFunc={setFunc} />
               <div id="method">
                 {selection === -1 ? metodos.map((metodos, index) => <div key={metodos.name}>
                 <button type="" onClick={() => setSelection(index)}>{metodos.name}</button>
               </div>) : <div>
                 <button onClick={() => setSelection(-1)}>Volver al menú</button>
-                <Metodo params={params} setParams={setParams} method={metodos[selection]} func={func} />
+                { selection > 3 ?
+                  <SystemMethod /> :
+                  <Metodo params={params} setParams={setParams} method={metodos[selection]} func={func} />
+                }
               </div>}
             </div>
+            */
+          }
       
-        </StartForm>
-      </DashboardLayout>
-      
-      
-  
-  
+      </>
     )
   }

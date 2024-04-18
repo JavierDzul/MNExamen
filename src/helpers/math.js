@@ -1,6 +1,6 @@
 import { create, all } from 'mathjs';
 export const math = create(all)
-math.import({ln: math.log})
+math.import({ln: math.log, csc: math.csc, sen:Math.sin, cos: math.cos})
 
 
 export const metodos = [
@@ -163,7 +163,87 @@ export const metodos = [
       return { f, xi0: x0, xi: x1, fxi0: fx0, fxi, xi1, x0:x1, x1: xi1, e }
       //return { df, dfxi, xi: xi0, fxi, xi1, e, result: xi1 }
     }
-  }
+  },
+  {
+    name: 'Método de Gauss-Seidel',
+    params: [
+      'e',
+    ],
+    matrixLength: 3,
+    columns: [
+      'i',
+      'x10',
+      'x20',
+      'x30',
+      'ex1',
+      'ex2',
+      'ex3'
+    ],
+    func: ({ x1, x2, x3, x10, x20, x30 }) => {
+      let cx10 = x10 ?? 0
+      let cx20 = x20 ?? 0
+      let cx30 = x30 ?? 0
+
+      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
+      const nx20 = math.evaluate(x2, { x1: nx10, x3: cx30 })
+      const nx30 = math.evaluate(x3, { x1: nx10, x2: nx20 })
+
+      const ex1 = (nx10 - cx10)/nx10 * 100
+      const ex2 = (nx20 - cx20)/nx20 * 100
+      const ex3 = (nx30 - cx30)/nx30 * 100
+
+      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
+    }
+  },
+  {
+    name: 'Método de Jacobi',
+    params: [
+      'e',
+      'x1',
+      'x2',
+      'x3',
+    ],
+    matrixLength: 3,
+    columns: [
+      'i',
+      'x10',
+      'x20',
+      'x30',
+      'ex1',
+      'ex2',
+      'ex3'
+    ],
+    func: ({ x1, x2, x3, x10, x20, x30 }) => {
+      let cx10 = x10 ?? 0
+      let cx20 = x20 ?? 0
+      let cx30 = x30 ?? 0
+
+      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
+      const nx20 = math.evaluate(x2, { x1: cx10, x3: cx30 })
+      const nx30 = math.evaluate(x3, { x1: cx10, x2: cx20 })
+
+      const ex1 = (nx10 - cx10)/nx10 * 100
+      const ex2 = (nx20 - cx20)/nx20 * 100
+      const ex3 = (nx30 - cx30)/nx30 * 100
+
+      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
+    }
+  },
+  {
+    name: 'Método de Newton Rapson',
+    params: [
+      'x0',
+      'y0',
+      'e'
+    ],
+    columns: [
+      'i',
+      'xi',
+      'yi',
+      'ex',
+      'ey',
+    ],
+  },
 ]
 
 
@@ -179,6 +259,7 @@ export function fromLatex(latex) {
   .replaceAll('\\pi', 'pi')
   .replaceAll('\\cos', 'cos')
   .replaceAll('\\ln', 'ln')
+  .replace(/([a-z])([a-z0-9])/gi, '$1*$2');
 
   text = text.replace(/{([^{}]+)}/g, '($1)');
   text = text.replaceAll('\\', '');

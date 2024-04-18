@@ -1,10 +1,13 @@
 import { HomePage } from "./dashboard/pages/home"
 
+import { AppRouter } from "./router/AppRouter"
+
+
 function App() {
   
   return (
     <>
-      <HomePage></HomePage>
+      <AppRouter></AppRouter>
     </>
   )
 }
