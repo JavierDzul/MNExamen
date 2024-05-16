@@ -1,6 +1,6 @@
 
 
-export const StartForm = ({children}) => {
+export const StartForm = () => {
   return (
     
         

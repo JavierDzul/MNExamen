@@ -244,6 +244,494 @@ export const metodos = [
       'ey',
     ],
   },
+  {
+    name: 'Método del Trapecio de Aplicación Múltiple',
+    params: [
+      'f',
+      'n',
+      'x0',
+      'xn',
+    ],
+    func:({f, n , x0, xn}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:+n};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let points = []
+      points[0] = +x0 + +h
+      console.log("Points list whit first point")
+      console.log(points);
+
+      const evaluatedPoints = [];
+      evaluatedPoints[0] = functionCompiled.evaluate({x:points[0]})
+
+      const sum = (functionCompiled, n, h, points, evaluatedPoints) => {
+          let aux = {x: 0}
+          for(let i = 1; i < (n-1); i++){
+            points[i] = points[i-1] + h;
+            aux = {x: points[i]}
+            
+            evaluatedPoints[i] = functionCompiled.evaluate(aux)
+          }
+          console.log("Points list: ");
+          console.log(points);
+
+          console.log("Evaluated points list: ");
+          console.log(evaluatedPoints);
+
+          return math.sum(evaluatedPoints);
+      }
+
+      const sumatory = sum(functionCompiled, n, h, points, evaluatedPoints);
+
+      const simpson = math.parse(' ( h / 2 ) * ( fx0 + ( 2 * sum ) + fxn )')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const fx0 = functionCompiled.evaluate({x: x0});
+      console.log("evaluated fx0: ")
+      console.log(fx0);
+      
+      const fxn = functionCompiled.evaluate({x: xn});
+      console.log("evaluated fxn: ")
+      console.log(fxn);
+
+      const simpsonScope = {h:h, fx0:fx0, sum: sumatory, fxn: fxn }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
+  {
+    name: 'Método de Simpson 1/3 de Aplicación Múltiple',
+    params: [
+      'f',
+      'n',
+      'x0',
+      'xn',
+    ],
+    func:({f, n , x0, xn}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:+n};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let oddPoints = []
+      let evenPoints = []
+      oddPoints[0] = +x0 + +h
+      console.log("ODD Points list whit first point")
+      console.log(oddPoints);
+
+      evenPoints[0] = oddPoints[0] + +h;
+      console.log("EVEN Points list with first point")
+      console.log(evenPoints);
+
+      const evaluatedOddPoints = [];
+      const evaluatedEvenPoints = [];
+      evaluatedOddPoints[0] = functionCompiled.evaluate({x:oddPoints[0]})
+      evaluatedEvenPoints[0] = functionCompiled.evaluate({x:evenPoints[0]})
+      
+      const oddSum = (functionCompiled, n, h, oddPoints, evaluatedOddPoints) => {
+          let aux = {x: 0}
+          for(let i = 1; i < (n-1); i++){
+            if(i % 2 == 0){
+              oddPoints[i] = oddPoints[i-2] + (2*h);
+              aux = {x: oddPoints[i]}
+
+              evaluatedOddPoints[i] = functionCompiled.evaluate(aux)
+            }
+            else{
+              evaluatedOddPoints[i] = 0;
+            }
+          }
+          console.log("oddPoints list: ");
+          console.log(oddPoints);
+
+          console.log("Evaluated oddPoints list: ");
+          console.log(evaluatedOddPoints);
+
+          return math.sum(evaluatedOddPoints);
+      }
+
+      const evenSum = (functionCompiled, n, h, evenPoints, evaluatedEvenPoints) => {
+        let aux = {x: 0}
+        for(let i = 1; i < (n-2); i++){
+          if(i%2===0){
+            evenPoints[i] = evenPoints[i-2] + (2*h);
+            aux = {x: evenPoints[i]}
+            
+            evaluatedEvenPoints[i] = functionCompiled.evaluate(aux)
+          }
+          else{
+            evaluatedEvenPoints[i] = 0;
+          }
+        }
+        console.log("EvenPoints list: ");
+        console.log(evenPoints);
+
+        console.log("Evaluated evenPoints list: ");
+        console.log(evaluatedEvenPoints);
+
+        return math.sum(evaluatedEvenPoints);
+    }
+
+
+      const oddSumatory = oddSum(functionCompiled, n, h, oddPoints, evaluatedOddPoints);
+      const evenSumatory = evenSum(functionCompiled, n, h, evenPoints, evaluatedEvenPoints);
+
+      const simpson = math.parse(' ( xn - x0 ) * (( fx0 + ( 4 * odd ) + ( 2 * even ) + fxn ) / (3 * n))')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const fx0 = functionCompiled.evaluate({x: x0});
+      console.log("evaluated fx0: ")
+      console.log(fx0);
+      
+      const fxn = functionCompiled.evaluate({x: xn});
+      console.log("evaluated fxn: ")
+      console.log(fxn);
+
+      const simpsonScope = {xn: xn, x0: x0, n:n, fx0:fx0, odd: oddSumatory, even: evenSumatory, fxn: fxn }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
+  {
+    name: 'Método de Simpson 3/8',//9
+    params: [
+      'f',
+      'x0',
+      'xn',
+    ],
+    func:({f, x0, xn}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:3};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let points = []
+      points[0] = +x0 + +h
+      points[1] = points[0] + +h
+      console.log("points list 3/8")
+      console.log(points);
+
+      const evaluatedPoints = [];
+      evaluatedPoints[0] = functionCompiled.evaluate({x:points[0]})
+      evaluatedPoints[1] = functionCompiled.evaluate({x:points[1]})
+
+      const fx1 = evaluatedPoints[0];
+      const fx2 = evaluatedPoints[1];
+
+      console.log("evaluated points")
+      console.log(evaluatedPoints);
+
+      const simpson = math.parse(' ( xn - x0 ) * (( fx0 + ( 3 * fx1 ) + ( 3 * fx2 ) + fxn ) / 8 )')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const fx0 = functionCompiled.evaluate({x: x0});
+      console.log("evaluated 3/8 fx0: ")
+      console.log(fx0);
+      
+      const fxn = functionCompiled.evaluate({x: xn});
+      console.log("evaluated 3/8 fxn: ")
+      console.log(fxn);
+
+      const simpsonScope = {xn:xn, x0: x0, fx0:fx0, fx1: fx1, fx2: fx2, fxn: fxn }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
+  {
+    name: 'Regla de Boole',
+    params: [
+      'f',
+      'n',
+      'x0',
+      'xn',
+    ],
+    func:({f, x0, xn,n}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:n};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let points = []
+      points[0] = +x0 + +h
+      points[1] = points[0] + +h
+      points[2] = points[1] + +h
+      console.log("points list")
+      console.log(points);
+
+      const evaluatedPoints = [];
+      evaluatedPoints[0] = functionCompiled.evaluate({x:points[0]})
+      evaluatedPoints[1] = functionCompiled.evaluate({x:points[1]})
+      evaluatedPoints[2] = functionCompiled.evaluate({x:points[2]})
+
+      const fx1 = evaluatedPoints[0];
+      const fx2 = evaluatedPoints[1];
+      const fx3 = evaluatedPoints[2];
+
+      console.log("evaluated points")
+      console.log(evaluatedPoints);
+
+      const simpson = math.parse(' ( xn - x0 ) * (( ( 7 * fx0 ) + ( 32 * fx1 ) + ( 12 * fx2 ) + ( 32 * fx3 ) + ( 7 * fxn ) ) / 90 )')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const fx0 = functionCompiled.evaluate({x: x0});
+      console.log("evaluated fx0: ")
+      console.log(fx0);
+      
+      const fxn = functionCompiled.evaluate({x: xn});
+      console.log("evaluated fxn: ")
+      console.log(fxn);
+
+      const simpsonScope = {xn:xn, x0: x0, fx0:fx0, fx1: fx1, fx2: fx2, fx3: fx3, fxn: fxn }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
+  {
+    name: 'Método de Simpson 1/3', //11
+    params: [
+      'f',
+      'x0',
+      'xn',
+    ],
+    func:({f, x0, xn}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:2};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let points = []
+      points[0] = +x0 + +h
+      console.log("points list")
+      console.log(points);
+
+      const evaluatedPoints = [];
+      evaluatedPoints[0] = functionCompiled.evaluate({x:points[0]})
+
+      const fx1 = evaluatedPoints[0];
+
+      console.log("evaluated points")
+      console.log(evaluatedPoints);
+
+      const simpson = math.parse(' ( h / 3 ) * ( fx0 + ( 4 * fx1 ) + fxn ) ')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const fx0 = functionCompiled.evaluate({x: x0});
+      console.log("evaluated fx0: ")
+      console.log(fx0);
+      
+      const fxn = functionCompiled.evaluate({x: xn});
+      console.log("evaluated fxn: ")
+      console.log(fxn);
+
+      const simpsonScope = {h:h, fx0:fx0, fx1: fx1, fxn: fxn }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
+  {
+    name: 'Segmentos Impares',
+    params: [
+      'f',
+      'x0',
+      'xn',
+    ],
+    func:({f, x0, xn}) =>{
+
+      console.log("antes de parse")
+      const functionGiven = math.parse(f); //gives me a expression tree, information wise it's useful
+      console.log("despues de parse")
+      console.log("Expression given as an expresion tree: ")
+      console.log(functionGiven);
+      console.log(functionGiven.toString())
+
+      const functionCompiled = functionGiven.compile(); //makes it a expression ready to evaluate
+      console.log("Expressión compiled as js code: ")
+      console.log(functionCompiled);
+
+      const scopeH = {xn: +xn, x0:+x0, n:5};
+      console.log("Scope used for calculating h: ");
+      console.log(scopeH);
+
+
+      const h = math.evaluate('( xn - x0 ) / n', scopeH);
+      console.log("h value: ");
+      console.log(h);
+
+      let points = []
+      points[0] = +x0 + +h
+      points[1] = points[0] + +h
+      points[2] = points[1] + +h
+      points[3] = points[2] + +h
+      console.log("points list")
+      console.log(points);
+
+      
+      const simpson1_3 = metodos[11].func({f:f, x0: x0, xn: points[1]})
+
+      const simpson3_8 = metodos[9].func({f: f, x0:points[1], xn: xn })
+
+      
+      console.log("simpson 1/3")
+      console.log(simpson1_3);
+      console.log("simpson 3/8")
+      console.log(simpson3_8);
+
+      const simpson = math.parse(' l1 + l2 ')
+      console.log("parsed simpson: ")
+      console.log(simpson);
+      console.log(simpson.toString())
+
+      const compiledSimpson = simpson.compile();
+      console.log("compiled simpson: ")
+      console.log(compiledSimpson);
+
+      const simpsonScope = {l1: simpson1_3, l2:simpson3_8 }
+      
+      
+
+      const finalResult = compiledSimpson.evaluate(simpsonScope);
+
+      return finalResult; 
+
+    }
+  },
 ]
 
 

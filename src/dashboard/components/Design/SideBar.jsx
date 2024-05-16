@@ -16,7 +16,7 @@ export const Sidebar = () => {
           <li className="border border-3 border-light bg-opacity-25 border-start-0 border-end-0 rounded-end">
             <button className="nav-link d-flex text-white align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
               
-              <span className="ms-1" style={{ fontSize: '17px' }}>Unidad 2</span>
+              <span className="ms-2" style={{ fontSize: '17px' }}>Unidad 2</span>
             </button>
 
             <div className="collapse" id="collapseExample">
@@ -76,6 +76,51 @@ export const Sidebar = () => {
                     className="nav-link border-top text-black d-flex flex-column align-items-center" to="/newton-raphson">
                   
                     <span className='ms-2'>Newton Raphson</span>
+                </NavLink>
+
+              </div>
+            </div>
+
+
+          </li>
+
+          <li className="border mt-2 border-3 border-light bg-opacity-25 border-start-0 border-end-0 rounded-end">
+            <button className="nav-link d-flex text-white align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="false" aria-controls="collapsetwo">
+                <span className='ms-2' style={{ fontSize: '17px' }}>Unidad 4</span>
+            </button>
+
+            <div className="collapse" id="collapsethree">
+              <div className="card card-body text-center ">
+
+                <NavLink
+                  className="nav-link text-black d-flex flex-column align-items-center" to="/trapezoid">
+                  
+                  <span className='ms-2'>Regla de Trapecio de Aplicación Múltiple</span>
+                </NavLink>
+
+
+                <NavLink
+                  className="nav-link border-top d-flex text-black flex-column align-items-center" to="/simpson1-3">
+                  
+                  <span className='ms-2'>Regla de Simpson 1/3 de Aplicación Múltiple</span>
+                </NavLink>
+
+                <NavLink
+                    className="nav-link border-top text-black d-flex flex-column align-items-center" to="/simpson1-8">
+                  
+                    <span className='ms-2'>Regla de Simpson 3/8</span>
+                </NavLink>
+
+                <NavLink
+                    className="nav-link border-top text-black d-flex flex-column align-items-center" to="/segmentIntegrals">
+                  
+                    <span className='ms-2'>Regla de Boole</span>
+                </NavLink>
+
+                <NavLink
+                    className="nav-link border-top text-black d-flex flex-column align-items-center" to="/segment">
+                  
+                    <span className='ms-2'>Regla de Integrales de Segmentos Impares</span>
                 </NavLink>
 
               </div>

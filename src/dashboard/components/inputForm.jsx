@@ -8,7 +8,7 @@ addStyles();
 const InputForm = ({setFunc}) => {
 
     
-  const [latex, setLatex] = useState('x^{2}+xy-10,y+3xy^{2}-57')
+  const [latex, setLatex] = useState('x^2')
   const [result, setResult] = useState(0)
     
   const calculate = () => {

@@ -10,6 +10,7 @@ export const NewtonRaphson = ({method}) => {
 
     useEffect(() => {
     setParams({...params, f: func})
+    console.log(params)
     }, [func])
 
 
